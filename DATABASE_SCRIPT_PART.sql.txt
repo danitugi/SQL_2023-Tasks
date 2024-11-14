@@ -1,0 +1,59 @@
+CREATE DATABASE db4221710;
+USE db4221710;
+
+#FIRST TABLE:
+CREATE TABLE  account (branch_name CHAR(30),account_number CHAR(5), balance INT);
+
+INSERT INTO account VALUES('Downtown','A-101',500),
+('Mianus','A-215',700),('Perryridge','A-102',400),
+('Round hill','A-305',350),('Brighton','A-201',900),
+('Redwood','A-222',700),('Brighton','A-217',750);
+
+#SECOND TABLE:
+CREATE TABLE customer(customer_name CHAR(30),customer_street CHAR(30), customer_city CHAR(30));
+
+INSERT INTO customer VALUES
+('Jones','Main','Harrison'),('Smith','North','Rye'),
+('Hayes','Main','Harrison'),('Curry','North','Rye'),
+('Lindsay','Park','Pittsfield'),('Turner','Putnam','Stamford'),
+('Williams','Nassau','Princeton'),('Adams','Spring','Pittsfield'),
+('Johnson','Alma','Palo Alto'),('Glenn','Sand Hill','Woodside'),
+('Brooks','Senator','Brooklyn'),('Green','Walnut','Stamford');
+
+#THIRD TABLE:
+CREATE TABLE branch(branch_name CHAR(15),branch_city CHAR(15), assets INT);
+
+INSERT INTO branch VALUES
+('Downtown','Brooklyn',9000000),('Redwood','Palo Alto',2100000)
+,('Perryridge','Horseneck',1700000),('Mianus','Horseneck',400000),
+('Round hill','Horseneck',8000000),('Pownal','Bennington',300000),
+('North Town','Rye',3700000),('Brighton','Brooklyn',7100000);
+
+
+#FOURTH TABLE:
+CREATE TABLE depositor(customer_name CHAR(15),account_number CHAR(5));
+
+INSERT INTO depositor VALUES
+('Johnson','A-101'),('Smith','A-215'),
+('Hayes','A-102'),('Turner','A-305'),
+('Johnson','A-201'),('Jones','A-217'),
+('Lindsay','A-222');
+
+#FIFTH TABLE:
+CREATE TABLE loan(branch_name CHAR(15),loan_number CHAR(4), amount INT);
+
+INSERT INTO loan VALUES
+('Downtown','L-17',1000),('Redwood','L-23',2000),
+('Perryridge','L-15',1500),('Downtown','L-14',1500),
+('Mianus','L-93',500),('Round hill','L-11',900),
+('Perryridge','L-16',1300);
+
+#SIXTH TABLE:
+CREATE TABLE borrower(customer_name CHAR(15),loan_number CHAR(4));
+
+
+INSERT INTO borrower VALUES('Jones','L-17'),('Smith','L-23'),
+('Hayes','L-15'),('Jackson','L-14'),
+('Curry','L-93'),('Smith','L-11'),
+('Williams','L-17'),('Adams','L-16');
+

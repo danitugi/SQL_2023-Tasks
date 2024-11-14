@@ -1,0 +1,165 @@
+CREATE DATABASE db4221710;
+USE db4221710;
+
+#FIRST TABLE:
+CREATE TABLE  account (branch_name CHAR(30),account_number CHAR(5), balance INT);
+
+INSERT INTO ACCOUNT VALUES('Downtown','A-101',500),
+('Mianus','A-215',700),('Perryridge','A-102',400),
+('Round hill','A-305',350),('Brighton','A-201',900),
+('Redwood','A-222',700),('Brighton','A-217',750);
+
+#SECOND TABLE:
+CREATE TABLE customer(customer_name CHAR(30),customer_street CHAR(30), customer_city CHAR(30));
+
+INSERT INTO customer VALUES
+('Jones','Main','Harrison'),('Smith','North','Rye'),
+('Hayes','Main','Harrison'),('Curry','North','Rye'),
+('Lindsay','Park','Pittsfield'),('Turner','Putnam','Stamford'),
+('Williams','Nassau','Princeton'),('Adams','Spring','Pittsfield'),
+('Johnson','Alma','Palo Alto'),('Glenn','Sand Hill','Woodside'),
+('Brooks','Senator','Brooklyn'),('Green','Walnut','Stamford');
+
+#THIRD TABLE:
+CREATE TABLE branch(branch_name CHAR(15),branch_city CHAR(15), assets INT);
+
+INSERT INTO branch VALUES
+('Downtown','Brooklyn',9000000),('Redwood','Palo Alto',2100000)
+,('Perryridge','Horseneck',1700000),('Mianus','Horseneck',400000),
+('Round hill','Horseneck',8000000),('Pownal','Bennington',300000),
+('North Town','Rye',3700000),('Brighton','Brooklyn',7100000);
+
+
+#FOURTH TABLE:
+CREATE TABLE depositor(customer_name CHAR(15),account_number CHAR(5));
+
+INSERT INTO depositor VALUES
+('Johnson','A-101'),('Smith','A-215'),
+('Hayes','A-102'),('Turner','A-305'),
+('Johnson','A-201'),('Jones','A-217'),
+('Lindsay','A-222');
+
+#FIFTH TABLE:
+CREATE TABLE loan(branch_name CHAR(15),loan_number CHAR(4), amount INT);
+
+INSERT INTO loan VALUES
+('Downtown','L-17',1000),('Redwood','L-23',2000),
+('Perryridge','L-15',1500),('Downtown','L-14',1500),
+('Mianus','L-93',500),('Round hill','L-11',900),
+('Perryridge','L-16',1300);
+
+#SIXTH TABLE:
+CREATE TABLE borrower(customer_name CHAR(15),loan_number CHAR(4));
+
+
+INSERT INTO borrower VALUES('Jones','L-17'),('Smith','L-23'),
+('Hayes','L-15'),('Jackson','L-14'),
+('Curry','L-93'),('Smith','L-11'),
+('Williams','L-17'),('Adams','L-16');
+
+#SLIDE 7:
+SELECT branch_name, branch_city FROM branch;
+
+#SLIDE 9:
+SELECT branch_city FROM branch;
+
+SELECT DISTINCT branch_city FROM branch;
+
+#SLIDE 10:
+SELECT * FROM customer;
+
+#SLIDE 11:
+SELECT  account_number, balance - 10 FROM account;
+
+#SLIDE 12:
+SELECT branch_name, "is in", branch_city FROM branch;
+
+#SLIDE 14:
+SELECT loan_number FROM loan WHERE branch_name="Round Hill" AND amount>=1200;
+
+#SLIDE 15:
+SELECT loan_number FROM loan WHERE amount >= 1000 AND amount <= 2000;
+
+#SLIDE 16:
+SELECT loan_number FROM loan WHERE amount BETWEEN 1000 AND 2000; 
+
+#SLIDE 18:
+SELECT customer_name FROM customer WHERE customer_street LIKE "S%";
+
+#SLIDE 19:
+SELECT customer_name FROM customer WHERE customer_street LIKE BINARY "_S%"; 
+
+#SLIDE 20:
+SELECT account_number FROM account WHERE balance LIKE "1____";
+
+#ADDITIONAL:
+SELECT account_number FROM account WHERE balance LIKE "7__";
+
+#SLIDE 21:
+SELECT customer_name, amount FROM borrower,loan WHERE borrower.loan_number=loan.loan_number;
+
+#SLIDE 22:
+SELECT DISTINCT b1.loan_number FROM borrower AS b1, borrower AS b2 WHERE b1.loan_number=b2.loan_number AND b1.customer_name<>b2.customer_name;
+
+#SLIDE 23:
+SELECT DISTINCT b1.loan_number FROM borrower b1, borrower b2 WHERE b1.loan_number=b2.loan_number AND b1.customer_name<>b2.customer_name;
+
+#SLIDE 25:
+SELECT DISTINCT customer_name FROM borrower, loan WHERE branch_name="Perryridge" AND borrower.loan_number=loan.loan_number ORDER BY customer_name;
+
+#SLIDE 26: 
+SELECT * FROM loan ORDER BY amount DESC, loan_number ASC;
+
+#SLIDE 28:
+SELECT AVG (balance) FROM account WHERE branch_name="Perryridge";
+
+#SLIDE 31:
+SELECT AVG (balance) FROM account; 
+
+#SLIDE 32:
+SELECT branch_name, AVG (balance) FROM account GROUP BY branch_name;
+
+#SLIDE 33:
+SELECT branch_name, COUNT(DISTINCT customer_name) FROM depositor, account WHERE depositor.account_number=account.account_number GROUP BY branch_name;
+
+#SLIDE 35:
+SELECT customer_city, customer_street, COUNT(customer_name) FROM customer GROUP BY customer_city, customer_street;
+
+#SLIDE 36:
+SELECT branch_name, AVG(balance) FROM account GROUP BY branch_name HAVING AVG(balance)>1200;
+
+#SLIDE 37:
+SELECT branch_name, MAX(balance) FROM account GROUP BY branch_name HAVING AVG(balance)>1200;
+
+#SLIDE 39:
+SELECT depositor.customer_name, AVG(balance) FROM depositor, account, customer WHERE depositor.account_number=account.account_number AND depositor.customer_name=customer.customer_name AND customer_city="Harrison" GROUP BY depositor.customer_name HAVING COUNT(DISTINCT depositor.account_number)>=3;
+
+#SLIDE 40:
+SELECT loan_number, amount-100 AS new_amount FROM loan;
+
+#SLIDE 41:
+SELECT loan_number, amount-100 new_amount FROM loan;
+
+#SLIDE 44:
+SELECT customer_name, balance FROM depositor JOIN account ON depositor.account_number=account.account_number;
+
+#SLIDE 45:
+SELECT customer_name, balance FROM depositor JOIN account USING (account_number);
+
+#SLIDE 50:
+SELECT customer_name, loan_number FROM customer LEFT JOIN borrower USING (customer_name);
+
+#SLIDE 57:
+SELECT customer.customer_name, loan_number, customer_city FROM customer, borrower WHERE customer.customer_name = borrower.customer_name;
+
+SELECT customer_name, loan_number, customer_city FROM customer NATURAL JOIN borrower;
+
+SELECT customer_name FROM depositor NATURAL LEFT JOIN borrower WHERE loan_number IS NULL;
+
+#SLIDE 58:
+SELECT branch.branch_name,account.* FROM branch LEFT JOIN account ON (branch.branch_name= account.branch_name AND balance>400);
+
+SELECT branch.branch_name,account.account_number, account.balance FROM branch LEFT JOIN account ON (branch.branch_name= account.branch_name AND balance>400);
+
+
+#DROP DATABASE db4221710;
